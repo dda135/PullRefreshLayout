@@ -3,12 +3,14 @@ package fanjh.mine.pulllayout;
 import android.content.Context;
 import android.graphics.Point;
 import android.support.v4.view.MotionEventCompat;
+import android.text.BoringLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Scroller;
 
 import java.util.ArrayList;
@@ -243,7 +245,7 @@ public class PullLayout extends ViewGroup{
                 }
                 break;
         }
-        mLastPoint.set((int)event.getX(),(int)event.getY());
+        mLastPoint.set((int) event.getX(), (int) event.getY());
         return true;
     }
 
@@ -255,10 +257,12 @@ public class PullLayout extends ViewGroup{
         if(!hasHeaderOrFooter() || deltaY == 0){//不需要偏移
             return;
         }
-        if(!canUp && (mCurrentOffset + deltaY > 0)){//此时偏移量不应该>0
-            deltaY = (0 - mCurrentOffset);
-        }else if(!canDown && (mCurrentOffset + deltaY < 0)){//此时偏移量不应该<0
-            deltaY = (0 - mCurrentOffset);
+        if (isOnTouch) {
+            if (!canUp && (mCurrentOffset + deltaY > 0)) {//此时偏移量不应该>0
+                deltaY = (0 - mCurrentOffset);
+            } else if (!canDown && (mCurrentOffset + deltaY < 0)) {//此时偏移量不应该<0
+                deltaY = (0 - mCurrentOffset);
+            }
         }
         mPrevOffset = mCurrentOffset;
         mCurrentOffset += deltaY;
@@ -297,9 +301,7 @@ public class PullLayout extends ViewGroup{
             return;
         }
         if (mCurrentOffset <= mOption.getLoadMoreOffset()) {
-            isLoading = true;
-            callLoadMoreBeginListener();
-            mScroller.trySmoothScrollToOffset(mOption.getLoadMoreOffset());
+            startLoading();
         } else {
             mScroller.trySmoothScrollToOffset(0);
         }
@@ -313,14 +315,29 @@ public class PullLayout extends ViewGroup{
             return;
         }
         if(mCurrentOffset >= mOption.getRefreshOffset()){
-            isRefreshing = true;
-            callRefreshBeginListener();
-            mScroller.trySmoothScrollToOffset(mOption.getRefreshOffset());
+            startRefreshing();
         }else{//没有达到刷新条件，还原状态
             mScroller.trySmoothScrollToOffset(0);
         }
     }
 
+    /**
+     * 处理刷新
+     */
+    private void startRefreshing(){
+        isRefreshing = true;
+        callRefreshBeginListener();
+        mScroller.trySmoothScrollToOffset(mOption.getRefreshOffset());
+    }
+
+    /**
+     * 处理加载
+     */
+    private void startLoading(){
+        isLoading = true;
+        callLoadMoreBeginListener();
+        mScroller.trySmoothScrollToOffset(mOption.getLoadMoreOffset());
+    }
     /**
      * 刷新完成
      */
@@ -446,6 +463,7 @@ public class PullLayout extends ViewGroup{
          * @param targetOffset 需要滑动到的偏移量
          */
         public void trySmoothScrollToOffset(int targetOffset){
+            Log.i("tag1",targetOffset+"");
             if(!hasHeaderOrFooter()){
                 return;
             }
@@ -478,6 +496,33 @@ public class PullLayout extends ViewGroup{
             mLastY = 0;
         }
 
+    }
+    /**
+     * 处理自动刷新
+     */
+    public void autoRefresh() {
+        boolean hasView = (mHeaderView != null &&  isEnabled());
+        boolean isWorking = (isRefreshing || isLoading || mScroller.isRunning);
+        boolean canUpToDown = !isOnTouch && mOption.canUpToDown();
+        if( !hasView || isWorking || !canUpToDown ) {
+            return;
+        }
+        mScroller.mSmoothScrollTime = 200;
+        startRefreshing();
+        mScroller.mSmoothScrollTime = ScrollerWorker.DEFAULT_SMOOTH_TIME;
+    }
+
+    /**
+     * 处理自动加载
+     */
+    public void autoLoading(){
+         boolean hasView = (mFooterView != null && isEnabled());
+         boolean isWorking = (isLoading || isRefreshing || mScroller.isRunning);
+         boolean canDownToUp = !isOnTouch && mOption.canDownToUp();
+        if (!hasView || isWorking || !canDownToUp) {
+            return;
+        }
+        startLoading();
     }
 
 }
