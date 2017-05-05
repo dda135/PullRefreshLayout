@@ -452,7 +452,8 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     public void autoRefresh() {
         boolean hasView = (mHeaderView != null && isEnabled());
         boolean isWorking = (isRefreshing || isLoading || mScroller.isRunning);
-        if (!hasView || isWorking || isOnTouch || !isNestedScrolling) {
+        boolean isTouch = (isOnTouch || isNestedScrolling);
+        if (!hasView || isWorking || isTouch) {
             return;
         }
         mScroller.mSmoothScrollTime = ScrollerWorker.AUTO_REFRESH_SMOOTH_TIME;
@@ -466,7 +467,8 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     public void autoLoading() {
         boolean hasView = (mFooterView != null && isEnabled());
         boolean isWorking = (isLoading || isRefreshing || mScroller.isRunning);
-        if (!hasView || isWorking || isOnTouch || !isNestedScrolling) {
+        boolean isTouch = (isOnTouch || isNestedScrolling);
+        if (!hasView || isWorking || isTouch) {
             return;
         }
         mScroller.mSmoothScrollTime = ScrollerWorker.AUTO_REFRESH_SMOOTH_TIME;
