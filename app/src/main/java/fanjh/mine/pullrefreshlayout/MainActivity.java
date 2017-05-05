@@ -34,6 +34,7 @@ public class MainActivity extends FragmentActivity {
         //setContentView(R.layout.activity_main);
         setContentView(R.layout.activity_list);
         mPullLayout = (PullLayout) findViewById(R.id.pl_parent_layout);
+        //mPullLayout.setContentFixed(true);
         mHeaderView = (HeaderView) findViewById(R.id.hv_header);
         mFooterView = (FooterView) findViewById(R.id.hv_footer);
         //mScrollview = (NestedScrollView) findViewById(R.id.sv_content);

@@ -151,7 +151,11 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         MarginLayoutParams lp;
         lp = (MarginLayoutParams) mContentView.getLayoutParams();
         left = (l + getPaddingLeft() + lp.leftMargin);
-        top = (t + getPaddingTop() + lp.topMargin) + mCurrentOffset;
+        if (mOption.isContentFixed()) {
+            top = (t + getPaddingTop() + lp.topMargin);
+        }else{
+            top = (t + getPaddingTop() + lp.topMargin) + mCurrentOffset;
+        }
         mContentView.layout(left, top, left + mContentView.getMeasuredWidth(), top + mContentView.getMeasuredHeight());
         if (null != mHeaderView) {
             lp = (MarginLayoutParams) mHeaderView.getLayoutParams();
@@ -444,6 +448,11 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     public void setOnCheckHandler(PullLayoutOption.OnCheckHandler handler) {
         mOption.setOnCheckHandler(handler);
     }
+
+    public void setContentFixed(boolean contentFixed){
+        mOption.setContentFixed(contentFixed);
+    }
+
     /** end **/
 
     /**
