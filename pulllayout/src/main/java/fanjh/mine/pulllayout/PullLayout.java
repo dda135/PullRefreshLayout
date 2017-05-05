@@ -135,13 +135,11 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
             measureChildWithMargins(mHeaderView, widthMeasureSpec, 0, heightMeasureSpec, 0);
             lp = (MarginLayoutParams) mHeaderView.getLayoutParams();
             mHeaderHeight = mHeaderView.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
-            mOption.setRefreshOffset(mHeaderHeight).setMaxDownOffset(mHeaderHeight << 1);
         }
         if (null != mFooterView) {
             measureChildWithMargins(mFooterView, widthMeasureSpec, 0, heightMeasureSpec, 0);
             lp = (MarginLayoutParams) mFooterView.getLayoutParams();
             mFooterHeight = mFooterView.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
-            mOption.setLoadMoreOffset(mFooterHeight).setMaxUpOffset(mFooterHeight << 1);
         }
     }
 
@@ -449,8 +447,50 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         mOption.setOnCheckHandler(handler);
     }
 
+    /**
+     * 在滑动过程中内容视图是否跟着移动
+     * @param contentFixed true不移动，默认false移动
+     */
     public void setContentFixed(boolean contentFixed){
         mOption.setContentFixed(contentFixed);
+    }
+
+    /**
+     * 必须在外面设置触发加载更多的偏移量以及底部上拉的最大偏移量
+     * @param loadMoreOffset 触发加载更多的偏移量>0
+     * @param maxUpOffset 底部上拉的最大偏移量>0
+     */
+    public void setLoadMoreOffset(int loadMoreOffset,int maxUpOffset) {
+        if(loadMoreOffset > maxUpOffset){
+            throw new IllegalArgumentException("触发加载更多偏移量不能大于底部上拉的最大偏移量！");
+        }
+        mOption.setLoadMoreOffset(loadMoreOffset).setMaxUpOffset(maxUpOffset);
+    }
+
+    /**
+     * 必须在外面设置触发刷新的偏移量以及顶部下拉的最大偏移量
+     * @param refreshOffset 触发刷新的偏移量>0
+     * @param maxDownOffset 顶部下拉的最大偏移量>0
+     */
+    public void setRefreshOffset(int refreshOffset,int maxDownOffset) {
+        if(refreshOffset > maxDownOffset){
+            throw new IllegalArgumentException("触发刷新的偏移量不能大于顶部下拉的最大偏移量！");
+        }
+        mOption.setRefreshOffset(refreshOffset).setMaxDownOffset(maxDownOffset);
+    }
+
+    /**
+     * 获取头部视图的高度，在设置有头部视图并且测量完成后才有值
+     */
+    public int getHeaderHeight() {
+        return mHeaderHeight;
+    }
+
+    /**
+     * 获取底部视图的高度，在设置有地不是图并且测量完成后才有值
+     */
+    public int getFooterHeight() {
+        return mFooterHeight;
     }
 
     /** end **/

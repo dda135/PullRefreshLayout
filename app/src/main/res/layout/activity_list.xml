@@ -11,12 +11,12 @@
         android:layout_height="match_parent"
         />
 
-    <fanjh.mine.pullrefreshlayout.HeaderView
+    <fanjh.mine.pullrefreshlayout.HeaderProgressView
         android:id="@+id/hv_header"
         android:layout_width="match_parent"
         android:layout_height="60dp"/>
 
-    <fanjh.mine.pullrefreshlayout.FooterView
+    <fanjh.mine.pullrefreshlayout.FooterProgressView
         android:id="@+id/hv_footer"
         android:layout_width="match_parent"
         android:layout_height="60dp"/>
