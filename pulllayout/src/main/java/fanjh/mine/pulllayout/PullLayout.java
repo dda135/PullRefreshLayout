@@ -3,16 +3,13 @@ package fanjh.mine.pulllayout;
 import android.content.Context;
 import android.graphics.Point;
 import android.support.v4.view.MotionEventCompat;
-import android.text.BoringLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Scroller;
-
 import java.util.ArrayList;
 
 /**
@@ -422,6 +419,7 @@ public class PullLayout extends ViewGroup{
      */
     private class ScrollerWorker implements Runnable{
         public static final int DEFAULT_SMOOTH_TIME = 400;//ms
+        public static final int AUTO_REFRESH_SMOOTH_TIME = 200;//ms,自动刷新和自动加载时布局弹出时间
         private int mSmoothScrollTime;
         private int mLastY;//上次的Y坐标偏移量
         private Scroller mScroller;//间隔计算执行者
@@ -463,7 +461,6 @@ public class PullLayout extends ViewGroup{
          * @param targetOffset 需要滑动到的偏移量
          */
         public void trySmoothScrollToOffset(int targetOffset){
-            Log.i("tag1",targetOffset+"");
             if(!hasHeaderOrFooter()){
                 return;
             }
@@ -507,7 +504,7 @@ public class PullLayout extends ViewGroup{
         if( !hasView || isWorking || !canUpToDown ) {
             return;
         }
-        mScroller.mSmoothScrollTime = 200;
+        mScroller.mSmoothScrollTime = ScrollerWorker.AUTO_REFRESH_SMOOTH_TIME;
         startRefreshing();
         mScroller.mSmoothScrollTime = ScrollerWorker.DEFAULT_SMOOTH_TIME;
     }
@@ -522,7 +519,9 @@ public class PullLayout extends ViewGroup{
         if (!hasView || isWorking || !canDownToUp) {
             return;
         }
+        mScroller.mSmoothScrollTime = ScrollerWorker.AUTO_REFRESH_SMOOTH_TIME;
         startLoading();
+        mScroller.mSmoothScrollTime = ScrollerWorker.DEFAULT_SMOOTH_TIME;
     }
 
 }
