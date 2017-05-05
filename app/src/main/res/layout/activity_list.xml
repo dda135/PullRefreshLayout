@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fanjh.mine.pulllayout.PullLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pl_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/sv_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <fanjh.mine.pullrefreshlayout.HeaderView
+        android:id="@+id/hv_header"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"/>
+
+    <fanjh.mine.pullrefreshlayout.FooterView
+        android:id="@+id/hv_footer"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"/>
+
+</fanjh.mine.pulllayout.PullLayout>
