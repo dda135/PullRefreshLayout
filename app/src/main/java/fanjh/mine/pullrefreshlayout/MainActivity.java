@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ScrollView;
 
@@ -46,7 +47,7 @@ public class MainActivity extends FragmentActivity {
                     public void run() {
                         mPullLayout.refreshComplete();
                     }
-                },3000);
+                }, 3000);
             }
 
             @Override
@@ -72,7 +73,7 @@ public class MainActivity extends FragmentActivity {
                     public void run() {
                         mPullLayout.loadingComplete();
                     }
-                },3000);
+                }, 3000);
             }
 
             @Override
@@ -80,5 +81,14 @@ public class MainActivity extends FragmentActivity {
 
             }
         });
+
+        mPullLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mPullLayout.autoRefresh();
+            }
+        },1000);
+
+
     }
 }
