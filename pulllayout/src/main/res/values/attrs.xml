@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PullLayout">
+        <attr name="refreshOffset" format="dimension" />
+        <attr name="loadMoreOffset" format="dimension" />
+        <attr name="maxUpOffset" format="dimension" />
+        <attr name="maxDownOffset" format="dimension" />
+        <attr name="contentFixed" format="boolean" />
+        <attr name="disabledNestedScrolling" format="boolean" />
+    </declare-styleable>
+</resources>

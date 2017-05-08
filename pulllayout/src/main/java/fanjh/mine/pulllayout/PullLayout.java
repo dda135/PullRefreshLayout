@@ -1,6 +1,7 @@
 package fanjh.mine.pulllayout;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.NestedScrollingChild;
@@ -62,6 +63,8 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     private boolean canDown;
     //当前是否处于嵌套滑动中
     private boolean isNestedScrolling;
+    //是否允许嵌套滑动，没有使用isNestedScrolling是因为版本问题
+    private boolean disabledNestedScrolling;
 
     private NestedScrollingParentHelper mParentHelper;
     private NestedScrollingChildHelper mChildHelper;
@@ -77,6 +80,27 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     public PullLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initData();
+        TypedArray array = context.obtainStyledAttributes(attrs,R.styleable.PullLayout);
+        int refreshOffset = array.getDimensionPixelOffset(R.styleable.PullLayout_refreshOffset,0);
+        if(0 != refreshOffset){
+            mOption.setRefreshOffset(refreshOffset);
+        }
+        int loadMoreOffset = array.getDimensionPixelOffset(R.styleable.PullLayout_loadMoreOffset,0);
+        if(0 != loadMoreOffset){
+            mOption.setLoadMoreOffset(loadMoreOffset);
+        }
+        int maxUpOffset = array.getDimensionPixelOffset(R.styleable.PullLayout_maxUpOffset,0);
+        if(0 != maxUpOffset){
+            mOption.setMaxUpOffset(maxUpOffset);
+        }
+        int maxDownOffset = array.getDimensionPixelOffset(R.styleable.PullLayout_maxDownOffset,0);
+        if(0 != maxDownOffset){
+            mOption.setMaxDownOffset(maxDownOffset);
+        }
+        boolean contentFixed = array.getBoolean(R.styleable.PullLayout_contentFixed,false);
+        mOption.setContentFixed(contentFixed);
+        disabledNestedScrolling = array.getBoolean(R.styleable.PullLayout_disabledNestedScrolling,false);
+        array.recycle();
     }
 
     private void initData() {
@@ -530,11 +554,14 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         //只接收竖直方向上面的嵌套滑动
         boolean isVerticalScroll = (nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL);
         boolean canTouchMove = isEnabled() && hasHeaderOrFooter();
-        return isVerticalScroll && canTouchMove;
+        return !disabledNestedScrolling && isVerticalScroll && canTouchMove;
     }
 
     @Override
     public void onStopNestedScroll(View child) {
+        if(disabledNestedScrolling){
+            return;
+        }
         mParentHelper.onStopNestedScroll(child);
         if (isNestedScrolling) {
             isNestedScrolling = false;
@@ -556,6 +583,9 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
 
     @Override
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
+        if(disabledNestedScrolling){
+            return;
+        }
         if (isNestedScrolling) {
             canUp = mOption.canUpToDown();
             canDown = mOption.canDownToUp();
@@ -572,6 +602,9 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
 
     @Override
     public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+        if(disabledNestedScrolling){
+            return;
+        }
         boolean canTouch = !isLoading && !isRefreshing && !isOnTouch;
         if (dyUnconsumed != 0 && canTouch) {
             canUp = mOption.canUpToDown();
