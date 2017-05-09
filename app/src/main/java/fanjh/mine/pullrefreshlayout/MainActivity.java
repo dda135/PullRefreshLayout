@@ -35,16 +35,16 @@ public class MainActivity extends FragmentActivity {
         //setContentView(R.layout.activity_main);
         setContentView(R.layout.activity_list);
         mPullLayout = (PullLayout) findViewById(R.id.pl_parent_layout);
-        mPullLayout.setContentFixed(true);
-        mPullLayout.post(new Runnable() {
+        //mPullLayout.setContentFixed(false);
+        /*mPullLayout.post(new Runnable() {
             @Override
             public void run() {
                 //mPullLayout.setLoadMoreOffset(mPullLayout.getFooterHeight(),mPullLayout.getFooterHeight()<<1);
                 //mPullLayout.setRefreshOffset(mPullLayout.getHeaderHeight(),mPullLayout.getHeaderHeight()<<1);
-                mPullLayout.setLoadMoreOffset(150,300);
-                mPullLayout.setRefreshOffset(300,600);
+                mPullLayout.setLoadMoreOffset(mPullLayout.getFooterHeight(),450);
+                mPullLayout.setRefreshOffset(mPullLayout.getHeaderHeight(),600);
             }
-        });
+        });*/
         //mHeaderView = (HeaderView) findViewById(R.id.hv_header);
         //mFooterView = (FooterView) findViewById(R.id.hv_footer);
         //mScrollview = (NestedScrollView) findViewById(R.id.sv_content);
