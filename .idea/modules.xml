@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PullRefreshLayout.iml" filepath="$PROJECT_DIR$/PullRefreshLayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pullRefresh.iml" filepath="$PROJECT_DIR$/pullRefresh.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pulllayout/pulllayout.iml" filepath="$PROJECT_DIR$/pulllayout/pulllayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/pulllayout/pulllayout.iml" filepath="$PROJECT_DIR$/pulllayout/pulllayout.iml" />
     </modules>
   </component>
