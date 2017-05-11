@@ -169,6 +169,10 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        Log.i("test","l===" + l);
+        Log.i("test","t===" + t);
+        Log.i("test","r===" + r);
+        Log.i("test","b===" + b);
         int left, top;
         MarginLayoutParams lp;
         lp = (MarginLayoutParams) mContentView.getLayoutParams();
@@ -348,6 +352,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
             startLoading();
         } else {
             mScroller.trySmoothScrollToOffset(0);
+            callBeforeLoadMoreListener();
         }
     }
 
@@ -362,6 +367,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
             startRefreshing();
         } else {//没有达到刷新条件，还原状态
             mScroller.trySmoothScrollToOffset(0);
+            cllBeforeRefreshListener();
         }
     }
 
@@ -408,8 +414,13 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     }
 
     /**
-     * 回调刷新和加载的各种监听
+     * 回调刷新的各种监听
      **/
+    private void cllBeforeRefreshListener(){
+        for (IRefreshListener listener : mRefreshListeners) {
+            listener.onBeforeRefresh();
+        }
+    }
     private void callRefreshBeginListener() {
         for (IRefreshListener listener : mRefreshListeners) {
             listener.onRefreshBegin();
@@ -431,6 +442,14 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         }
     }
 
+    /**
+     * 回调加载的监听
+     */
+    private  void callBeforeLoadMoreListener(){
+        for (ILoadMoreListener listener : mLoadMoreListeners) {
+            listener.onBeforeLoad();
+        }
+    }
     private void callLoadMoreBeginListener() {
         for (ILoadMoreListener listener : mLoadMoreListeners) {
             listener.onLoadMoreBegin();

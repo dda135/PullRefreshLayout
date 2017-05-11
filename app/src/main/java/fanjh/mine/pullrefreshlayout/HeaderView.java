@@ -26,6 +26,11 @@ public class HeaderView extends TextView implements IRefreshListener{
     }
 
     @Override
+    public void onBeforeRefresh() {
+
+    }
+
+    @Override
     public void onRefreshBegin() {
         isBegining = true;
         setText("onRefreshBegin");

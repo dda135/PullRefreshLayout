@@ -27,6 +27,11 @@ public class FooterView extends TextView implements ILoadMoreListener{
     }
 
     @Override
+    public void onBeforeLoad() {
+
+    }
+
+    @Override
     public void onUIPositionChanged(int oldOffset, int newOffset) {
         if(!isLoadMoreing) {
             setText("oldOffset-->" + oldOffset + "--newOffset-->" + newOffset);

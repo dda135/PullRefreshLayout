@@ -95,6 +95,11 @@ public class MainActivity extends FragmentActivity {
         });
         mPullLayout.addRefreshListener(new IRefreshListener() {
             @Override
+            public void onBeforeRefresh() {
+
+            }
+
+            @Override
             public void onRefreshBegin() {
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -115,6 +120,11 @@ public class MainActivity extends FragmentActivity {
             }
         });
         mPullLayout.addLoadMoreListener(new ILoadMoreListener() {
+            @Override
+            public void onBeforeLoad() {
+
+            }
+
             @Override
             public void onUIPositionChanged(int oldOffset, int newOffset) {
 

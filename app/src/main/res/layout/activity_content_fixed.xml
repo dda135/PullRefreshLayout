@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fanjh.mine.pulllayout.PullLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_fixed_pullLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:maxDownOffset="240dp"
+    app:maxUpOffset="120dp"
+    app:refreshOffset="60dp"
+    app:loadMoreOffset="60dp"
+    app:contentFixed="true"
+    app:disabledNestedScrolling="false">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/content_fixedrecycleview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <fanjh.mine.pullrefreshlayout.HeaderProgressView
+        android:id="@+id/content_fixed_headerview"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <fanjh.mine.pullrefreshlayout.FooterProgressView
+        android:id="@+id/contet_fixed_footerview"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+
+</fanjh.mine.pulllayout.PullLayout>

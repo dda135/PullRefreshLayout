@@ -24,6 +24,11 @@ public class HeaderProgressView extends ProgressBar implements ILoadMoreListener
     }
 
     @Override
+    public void onBeforeLoad() {
+
+    }
+
+    @Override
     public void onUIPositionChanged(int oldOffset, int newOffset) {
     }
 

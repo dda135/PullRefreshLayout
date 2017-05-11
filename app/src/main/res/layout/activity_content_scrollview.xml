@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fanjh.mine.pulllayout.PullLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollviewview_pullLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:maxDownOffset="240dp"
+    app:maxUpOffset="120dp"
+    app:refreshOffset="60dp"
+    app:loadMoreOffset="60dp"
+    app:contentFixed="false"
+    app:disabledNestedScrolling="false">
+
+    <ScrollView
+        android:id="@+id/content_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/colorPrimaryDark"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/colorGray"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/colorPrimary"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/colorGray"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/colorPrimaryDark"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/colorGray"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/colorPrimaryDark"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <fanjh.mine.pullrefreshlayout.HeaderProgressView
+        android:id="@+id/scrollview_headerview"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <fanjh.mine.pullrefreshlayout.FooterProgressView
+        android:id="@+id/scrollview_footerview"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+
+</fanjh.mine.pulllayout.PullLayout>
