@@ -348,7 +348,9 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
             startLoading();
         } else {
             mScroller.trySmoothScrollToOffset(0);
-            callBeforeLoadMoreListener();
+            if(mCurrentOffset < 0) {
+                callBeforeLoadMoreListener();
+            }
         }
     }
 
@@ -363,7 +365,9 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
             startRefreshing();
         } else {//没有达到刷新条件，还原状态
             mScroller.trySmoothScrollToOffset(0);
-            cllBeforeRefreshListener();
+            if(mCurrentOffset > 0) {
+                callBeforeRefreshListener();
+            }
         }
     }
 
@@ -412,7 +416,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     /**
      * 回调刷新的各种监听
      **/
-    private void cllBeforeRefreshListener(){
+    private void callBeforeRefreshListener(){
         for (IRefreshListener listener : mRefreshListeners) {
             listener.onBeforeRefresh();
         }
@@ -587,6 +591,11 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
                 startLoading();
             } else {//没有达到刷新条件，还原状态
                 mScroller.trySmoothScrollToOffset(0);
+                if(mCurrentOffset < 0){
+                    callBeforeLoadMoreListener();
+                }else if(mCurrentOffset > 0){
+                    callBeforeRefreshListener();
+                }
             }
         }
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical">
 
     <ImageView
         android:layout_width="50dp"
@@ -11,75 +11,94 @@
         android:layout_marginTop="20dp"
         android:src="@mipmap/ic_launcher"/>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_marginTop="30dp"
-
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_marginTop="10dp"
+        >
 
-    <Button
-        android:id="@+id/btn_contentfixed"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="内容固定模式"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:background="@color/colorPrimary"
-        android:layout_height="50dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-
-
-    <Button
-        android:id="@+id/btn_contatin_scrollview"
-        android:layout_width="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="普通模式（ScroolView）"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:background="@color/colorPrimary"
-        android:layout_height="50dp" />
+            <Button
+                android:id="@+id/btn_contentfixed"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/colorPrimary"
+                android:text="内容固定模式"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
 
 
-    <Button
-        android:id="@+id/btn_contatin_listview"
-        android:layout_width="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="普通模式（ListView）"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:background="@color/colorPrimary"
-        android:layout_height="50dp" />
+            <Button
+                android:id="@+id/btn_contatin_scrollview"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorPrimary"
+                android:text="普通模式（ScroolView）"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
 
-    <Button
-        android:id="@+id/btn_contatin_recycleview"
-        android:layout_width="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="普通模式（RecycleView）"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:background="@color/colorPrimary"
-        android:layout_height="50dp" />
 
-    <Button
-        android:id="@+id/btn_contatin_nestscrooling"
-        android:layout_width="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="嵌套滑动模式（ScrollView）"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:background="@color/colorPrimary"
-        android:layout_height="50dp" />
+            <Button
+                android:id="@+id/btn_contatin_listview"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorPrimary"
+                android:text="普通模式（ListView）"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/btn_contatin_recycleview"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorPrimary"
+                android:text="普通模式（RecycleView）"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btn_contatin_nestscrooling"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorPrimary"
+                android:text="嵌套滑动模式（ScrollView）"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btn_autoRefreshingOrLoadMore"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorPrimary"
+                android:text="自动刷新模式"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
 </LinearLayout>

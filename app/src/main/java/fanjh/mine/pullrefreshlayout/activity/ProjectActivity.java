@@ -21,6 +21,7 @@ public class ProjectActivity extends Activity{
     Button btnListView;
     Button btnRecycleView;
     Button btnNestScrooling;
+    Button btnAutoRefreshOrLoad;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class ProjectActivity extends Activity{
         btnRecycleView = (Button) findViewById(R.id.btn_contatin_recycleview);
         btnScrollView = (Button) findViewById(R.id.btn_contatin_scrollview);
         btnNestScrooling = (Button) findViewById(R.id.btn_contatin_nestscrooling);
+        btnAutoRefreshOrLoad = (Button) findViewById(R.id.btn_autoRefreshingOrLoadMore);
     }
 
     private void initListener(){
@@ -73,6 +75,14 @@ public class ProjectActivity extends Activity{
                startActivity(new Intent(ProjectActivity.this,NestScrollingDemoActivity.class));
            }
        });
+
+        btnAutoRefreshOrLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProjectActivity.this,AutoRefreshOrLoadDemoActivity.class));
+            }
+        });
+
     }
 
 }

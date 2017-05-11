@@ -22,6 +22,7 @@
         <activity android:name=".activity.RecycleViewDemoActivity"></activity>
         <activity android:name=".activity.ScrollViewDemoActivity"></activity>
         <activity android:name=".activity.NestScrollingDemoActivity"></activity>
+        <activity android:name=".activity.AutoRefreshOrLoadDemoActivity"></activity>
 
     </application>
 
