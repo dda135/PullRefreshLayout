@@ -1,39 +1,39 @@
-package fanjh.mine.pullrefreshlayout;
+package fanjh.mine.pullrefreshlayout.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import fanjh.mine.pulllayout.ILoadMoreListener;
 import fanjh.mine.pulllayout.IRefreshListener;
 import fanjh.mine.pulllayout.PullLayout;
 import fanjh.mine.pulllayout.PullLayoutOption;
+import fanjh.mine.pullrefreshlayout.R;
 
 /**
  * Created by xuws on 2017/5/11.
  */
 
-public class ScrollViewDemoActivity extends Activity {
+public class NestScrollingDemoActivity extends Activity{
 
-    ScrollViewDemoActivity mContext;
+    NestScrollingDemoActivity mContext;
     PullLayout pullLayout;
-    ScrollView scrollView;
+    NestedScrollView nestedScrollView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content_scrollview);
-        pullLayout = (PullLayout) findViewById(R.id.scrollviewview_pullLayout);
-        scrollView = (ScrollView) findViewById(R.id.content_scrollview);
+        setContentView(R.layout.activity_content_nestscrolling);
         mContext = this;
         initView();
     }
 
     private void initView(){
+        pullLayout = (PullLayout) findViewById(R.id.nestscrolling_pullLayout);
+        nestedScrollView = (NestedScrollView) findViewById(R.id.content_nestscrolling);
         /**
          * 刷新滑动监听
          */
@@ -103,13 +103,13 @@ public class ScrollViewDemoActivity extends Activity {
             @Override
             public boolean canUpTpDown() {
                 //recycleView不能向上滑动，即滑到底了，这时候，可以加载更多
-                return !scrollView.canScrollVertically(-1);
+                return !nestedScrollView.canScrollVertically(-1);
             }
 
             @Override
             public boolean canDownToUp() {
                 //recycleview不能向下滑动，即在首部了，这时候，可以下拉刷新
-                return !scrollView.canScrollVertically(1);
+                return !nestedScrollView.canScrollVertically(1);
             }
         });
     }

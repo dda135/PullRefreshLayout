@@ -1,46 +1,38 @@
-package fanjh.mine.pullrefreshlayout;
+package fanjh.mine.pullrefreshlayout.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import fanjh.mine.pulllayout.ILoadMoreListener;
 import fanjh.mine.pulllayout.IRefreshListener;
 import fanjh.mine.pulllayout.PullLayout;
 import fanjh.mine.pulllayout.PullLayoutOption;
+import fanjh.mine.pullrefreshlayout.R;
 
 /**
  * Created by xuws on 2017/5/11.
  */
 
-public class RecycleViewDemoActivity extends Activity {
+public class ScrollViewDemoActivity extends Activity {
 
-    RecycleViewDemoActivity mContext;
-    RecyclerView recyclerView;
+    ScrollViewDemoActivity mContext;
     PullLayout pullLayout;
+    ScrollView scrollView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content_recycleview);
+        setContentView(R.layout.activity_content_scrollview);
+        pullLayout = (PullLayout) findViewById(R.id.scrollviewview_pullLayout);
+        scrollView = (ScrollView) findViewById(R.id.content_scrollview);
         mContext = this;
         initView();
     }
 
     private void initView(){
-        recyclerView = (RecyclerView) findViewById(R.id.content_recycleview);
-        pullLayout = (PullLayout) findViewById(R.id.recycleview_pullLayout);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        MyAdapter myAdapter = new MyAdapter();
-        recyclerView.setAdapter(myAdapter);
-
         /**
          * 刷新滑动监听
          */
@@ -110,48 +102,14 @@ public class RecycleViewDemoActivity extends Activity {
             @Override
             public boolean canUpTpDown() {
                 //recycleView不能向上滑动，即滑到底了，这时候，可以加载更多
-                return !recyclerView.canScrollVertically(-1);
+                return !scrollView.canScrollVertically(-1);
             }
 
             @Override
             public boolean canDownToUp() {
                 //recycleview不能向下滑动，即在首部了，这时候，可以下拉刷新
-                return !recyclerView.canScrollVertically(1);
+                return !scrollView.canScrollVertically(1);
             }
         });
-
     }
-
-    class MyAdapter extends RecyclerView.Adapter{
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            TextView textView = new TextView(mContext);
-            textView.setTextSize(16);
-            textView.setGravity(Gravity.CENTER);
-            textView.setPadding(10,10,10,10);
-            return new ViewHolder(textView);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ViewHolder viewHolder = (ViewHolder) holder;
-            viewHolder.textView.setText("item" + position);;
-        }
-
-        @Override
-        public int getItemCount() {
-            return 50;
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            TextView textView;
-            public ViewHolder(View itemView) {
-                super(itemView);
-                textView = (TextView) itemView;
-            }
-        }
-    }
-
 }

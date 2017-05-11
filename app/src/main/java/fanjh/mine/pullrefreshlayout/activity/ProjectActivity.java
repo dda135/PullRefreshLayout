@@ -1,4 +1,4 @@
-package fanjh.mine.pullrefreshlayout;
+package fanjh.mine.pullrefreshlayout.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import fanjh.mine.pullrefreshlayout.R;
 
 /**
  * Created by xuws on 2017/5/11.

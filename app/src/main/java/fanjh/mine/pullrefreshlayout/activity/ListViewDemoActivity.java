@@ -1,15 +1,14 @@
-package fanjh.mine.pullrefreshlayout;
+package fanjh.mine.pullrefreshlayout.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.ParcelUuid;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,31 +16,40 @@ import fanjh.mine.pulllayout.ILoadMoreListener;
 import fanjh.mine.pulllayout.IRefreshListener;
 import fanjh.mine.pulllayout.PullLayout;
 import fanjh.mine.pulllayout.PullLayoutOption;
+import fanjh.mine.pullrefreshlayout.R;
 
 /**
- * 内容固定模式，类似于swipeRefresh
  * Created by xuws on 2017/5/11.
  */
 
-public class ContentFixedActivity extends Activity {
+public class ListViewDemoActivity extends Activity {
 
-    ContentFixedActivity mContext;
-    RecyclerView contentRecycleView;
+    ListViewDemoActivity mContext;
+    ListView contentListView;
     PullLayout pullLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content_fixed);
         mContext = this;
-        initVeiw();
+        setContentView(R.layout.activity_content_listview);
+        initView();
     }
 
-    private void initVeiw(){
-        pullLayout = (PullLayout) findViewById(R.id.content_fixed_pullLayout);
-        contentRecycleView = (RecyclerView) findViewById(R.id.content_fixedrecycleview);
-        contentRecycleView.setLayoutManager(new LinearLayoutManager(mContext));
+    private void initView(){
+        pullLayout = (PullLayout) findViewById(R.id.listview_pullLayout);
+        contentListView = (ListView) findViewById(R.id.content_listview);
         MyAdapter myAdapter = new MyAdapter();
-        contentRecycleView.setAdapter(myAdapter);
+        contentListView.setAdapter(myAdapter);
+
+        pullLayout.setContentFixed(false);
+        pullLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                pullLayout.setLoadMoreOffset(pullLayout.getFooterHeight(),pullLayout.getFooterHeight() * 3);
+                pullLayout.setRefreshOffset(pullLayout.getHeaderHeight(),pullLayout.getHeaderHeight() * 3);
+            }
+        });
         /**
          * 刷新滑动监听
          */
@@ -111,46 +119,53 @@ public class ContentFixedActivity extends Activity {
             @Override
             public boolean canUpTpDown() {
                 //recycleView不能向上滑动，即滑到底了，这时候，可以加载更多
-                return !contentRecycleView.canScrollVertically(-1);
+                return !contentListView.canScrollVertically(-1);
             }
 
             @Override
             public boolean canDownToUp() {
                 //recycleview不能向下滑动，即在首部了，这时候，可以下拉刷新
-                return !contentRecycleView.canScrollVertically(1);
+                return !contentListView.canScrollVertically(1);
             }
         });
     }
 
-    class MyAdapter extends RecyclerView.Adapter{
+    class MyAdapter extends BaseAdapter{
 
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            TextView textView = new TextView(mContext);
-            textView.setTextSize(16);
-            textView.setGravity(Gravity.CENTER);
-            textView.setPadding(10,10,10,10);
-            return new ViewHolder(textView);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-             ViewHolder viewHolder = (ViewHolder) holder;
-             viewHolder.textView.setText("item" + position);;
-        }
-
-        @Override
-        public int getItemCount() {
+        public int getCount() {
             return 50;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            TextView textView;
-            public ViewHolder(View itemView) {
-                super(itemView);
-                textView = (TextView) itemView;
-            }
+        @Override
+        public Object getItem(int position) {
+            return null;
         }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder = null;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_listview, null, false);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            holder.textView.setText("item" + position);
+            return convertView;
+        }
+
+        class ViewHolder{
+           TextView textView;
+            public ViewHolder(View view){
+                textView = (TextView) view.findViewById(R.id.tv_textView);
+            }}
     }
 }

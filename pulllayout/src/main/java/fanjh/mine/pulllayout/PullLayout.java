@@ -169,10 +169,6 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        Log.i("test","l===" + l);
-        Log.i("test","t===" + t);
-        Log.i("test","r===" + r);
-        Log.i("test","b===" + b);
         int left, top;
         MarginLayoutParams lp;
         lp = (MarginLayoutParams) mContentView.getLayoutParams();

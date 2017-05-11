@@ -17,12 +17,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <fanjh.mine.pullrefreshlayout.HeaderProgressView
+    <fanjh.mine.pullrefreshlayout.headerview.HeaderProgressView
         android:id="@+id/recycleview_headerview"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
 
-    <fanjh.mine.pullrefreshlayout.FooterProgressView
+    <fanjh.mine.pullrefreshlayout.footerview.FooterProgressView
         android:id="@+id/recycleview_footerview"
         android:layout_width="match_parent"
         android:layout_height="60dp" />

@@ -1,10 +1,8 @@
-package fanjh.mine.pullrefreshlayout;
+package fanjh.mine.pullrefreshlayout.headerview;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import fanjh.mine.pulllayout.ILoadMoreListener;
 
@@ -13,14 +11,14 @@ import fanjh.mine.pulllayout.ILoadMoreListener;
 * @date 2017/5/4 11:10
 * @description 底部视图
 **/
-public class FooterProgressView extends ProgressBar implements ILoadMoreListener{
+public class HeaderProgressView extends ProgressBar implements ILoadMoreListener{
     private boolean isLoadMoreing;
 
-    public FooterProgressView(Context context) {
+    public HeaderProgressView(Context context) {
         this(context,null);
     }
 
-    public FooterProgressView(Context context, AttributeSet attrs) {
+    public HeaderProgressView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setIndeterminate(true);
     }

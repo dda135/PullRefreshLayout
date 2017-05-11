@@ -1,4 +1,4 @@
-package fanjh.mine.pullrefreshlayout;
+package fanjh.mine.pullrefreshlayout.headerview;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.widget.TextView;
 
 import fanjh.mine.pulllayout.IRefreshListener;
+import fanjh.mine.pullrefreshlayout.R;
 
 /**
 * @author fanjh

@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProjectActivity">
+        <activity android:name=".activity.ProjectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -16,12 +16,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ContentFixedActivity"></activity>
+        <activity android:name=".activity.ContentFixedActivity"></activity>
         <activity android:name=".MainActivity"></activity>
-        <activity android:name=".ListViewDemoActivity"></activity>
-        <activity android:name=".RecycleViewDemoActivity"></activity>
-        <activity android:name=".ScrollViewDemoActivity"></activity>
-        <activity android:name=".NestScrollingDemoActivity"></activity>
+        <activity android:name=".activity.ListViewDemoActivity"></activity>
+        <activity android:name=".activity.RecycleViewDemoActivity"></activity>
+        <activity android:name=".activity.ScrollViewDemoActivity"></activity>
+        <activity android:name=".activity.NestScrollingDemoActivity"></activity>
 
     </application>
 
