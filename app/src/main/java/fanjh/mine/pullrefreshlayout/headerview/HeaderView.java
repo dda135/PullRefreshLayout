@@ -1,4 +1,4 @@
-package fanjh.mine.pullrefreshlayout;
+package fanjh.mine.pullrefreshlayout.headerview;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.widget.TextView;
 
 import fanjh.mine.pulllayout.IRefreshListener;
+import fanjh.mine.pullrefreshlayout.R;
 
 /**
 * @author fanjh
@@ -23,6 +24,11 @@ public class HeaderView extends TextView implements IRefreshListener{
         setGravity(Gravity.CENTER);
         setTextSize(22);
         setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+    @Override
+    public void onBeforeRefresh() {
+
     }
 
     @Override

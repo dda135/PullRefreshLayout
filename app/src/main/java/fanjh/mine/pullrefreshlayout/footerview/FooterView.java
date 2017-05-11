@@ -1,4 +1,4 @@
-package fanjh.mine.pullrefreshlayout;
+package fanjh.mine.pullrefreshlayout.footerview;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.widget.TextView;
 
 import fanjh.mine.pulllayout.ILoadMoreListener;
+import fanjh.mine.pullrefreshlayout.R;
 
 /**
 * @author fanjh
@@ -24,6 +25,11 @@ public class FooterView extends TextView implements ILoadMoreListener{
         setGravity(Gravity.CENTER);
         setTextSize(22);
         setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    @Override
+    public void onBeforeLoad() {
+
     }
 
     @Override

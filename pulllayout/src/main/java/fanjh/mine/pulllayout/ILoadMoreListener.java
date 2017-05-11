@@ -7,6 +7,7 @@ package fanjh.mine.pulllayout;
 * @note 可以通过实现该回调，处理各种状态
 **/
 public interface ILoadMoreListener {
+    void onBeforeLoad();//没有达到加载条件底部开始回弹的回调
     void onUIPositionChanged(int oldOffset, int newOffset);
     void onLoadMoreBegin();
     void onLoadMoreComplete();

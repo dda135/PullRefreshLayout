@@ -3,22 +3,22 @@ package fanjh.mine.pullrefreshlayout;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import fanjh.mine.pulllayout.ILoadMoreListener;
 import fanjh.mine.pulllayout.IRefreshListener;
 import fanjh.mine.pulllayout.PullLayout;
 import fanjh.mine.pulllayout.PullLayoutOption;
+import fanjh.mine.pullrefreshlayout.footerview.FooterProgressView;
+import fanjh.mine.pullrefreshlayout.footerview.FooterView;
+import fanjh.mine.pullrefreshlayout.headerview.HeaderView;
 
 public class MainActivity extends FragmentActivity {
     private PullLayout mPullLayout;
@@ -95,6 +95,11 @@ public class MainActivity extends FragmentActivity {
         });
         mPullLayout.addRefreshListener(new IRefreshListener() {
             @Override
+            public void onBeforeRefresh() {
+
+            }
+
+            @Override
             public void onRefreshBegin() {
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -115,6 +120,11 @@ public class MainActivity extends FragmentActivity {
             }
         });
         mPullLayout.addLoadMoreListener(new ILoadMoreListener() {
+            @Override
+            public void onBeforeLoad() {
+
+            }
+
             @Override
             public void onUIPositionChanged(int oldOffset, int newOffset) {
 
