@@ -1,5 +1,7 @@
 package fanjh.mine.pulllayout;
 
+import android.util.Log;
+
 /**
 * @author fanjh
 * @date 2017/4/27 9:44
@@ -23,6 +25,10 @@ public class PullLayoutOption {
     private boolean isContentFixed;
     //校验监听
     private OnCheckHandler mOnCheckHandler;
+    //调用刷新完成之后实际开始操作的延时
+    private int mRefreshCompleteDelayed;
+    //调用加载完成之后实际开始操作的延时
+    private int mLoadCompleteDelayed;
 
     public interface OnCheckHandler{
         boolean canUpTpDown();
@@ -108,4 +114,19 @@ public class PullLayoutOption {
         return null == mOnCheckHandler || mOnCheckHandler.canDownToUp();
     }
 
+    public void setRefreshCompleteDelayed(int mRefreshCompleteDelayed) {
+        this.mRefreshCompleteDelayed = mRefreshCompleteDelayed;
+    }
+
+    public int getRefreshCompleteDelayed() {
+        return mRefreshCompleteDelayed;
+    }
+
+    public int getLoadCompleteDelayed() {
+        return mLoadCompleteDelayed;
+    }
+
+    public void setLoadCompleteDelayed(int mLoadCompleteDelayed) {
+        this.mLoadCompleteDelayed = mLoadCompleteDelayed;
+    }
 }

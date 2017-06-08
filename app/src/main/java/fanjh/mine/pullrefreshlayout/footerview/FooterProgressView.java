@@ -31,7 +31,8 @@ public class FooterProgressView extends ProgressBar implements ILoadMoreListener
     }
 
     @Override
-    public void onUIPositionChanged(int oldOffset, int newOffset) {
+    public void onUIPositionChanged(int oldOffset, int newOffset, int loadMoreOffset) {
+
     }
 
     @Override
@@ -41,6 +42,11 @@ public class FooterProgressView extends ProgressBar implements ILoadMoreListener
 
     @Override
     public void onLoadMoreComplete() {
+
+    }
+
+    @Override
+    public void onCanLoadMore() {
 
     }
 

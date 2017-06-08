@@ -63,13 +63,18 @@ public class RecycleViewDemoActivity extends Activity {
             }
 
             @Override
-            public void onUIPositionChanged(int oldOffset, int newOffset) {
+            public void onUIPositionChanged(int oldOffset, int newOffset, int refreshOffset) {
 
             }
 
             @Override
             public void onRefreshComplete() {
                 Toast.makeText(mContext,"亲，刷新已完成~",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCanRefresh() {
+
             }
         });
 
@@ -83,7 +88,7 @@ public class RecycleViewDemoActivity extends Activity {
             }
 
             @Override
-            public void onUIPositionChanged(int oldOffset, int newOffset) {
+            public void onUIPositionChanged(int oldOffset, int newOffset, int loadMoreOffset) {
 
             }
 
@@ -101,6 +106,11 @@ public class RecycleViewDemoActivity extends Activity {
             @Override
             public void onLoadMoreComplete() {
                 Toast.makeText(mContext,"亲，加载完成了哦~",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCanLoadMore() {
+
             }
         });
 

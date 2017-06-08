@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fanjh.mine.pulllayout.PullLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nestscrolling_pullLayout"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:maxDownOffset="240dp"
-    app:maxUpOffset="120dp"
-    app:refreshOffset="60dp"
-    app:loadMoreOffset="60dp"
-    app:contentFixed="false"
-    app:disabledNestedScrolling="false">
+<fanjh.mine.pulllayout.PullLayout android:id="@+id/nestscrolling_pullLayout"
+                                  xmlns:android="http://schemas.android.com/apk/res/android"
+                                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                                  android:layout_width="match_parent"
+                                  android:layout_height="match_parent"
+                                  android:orientation="vertical"
+                                  app:contentFixed="false"
+                                  app:disabledNestedScrolling="false"
+                                  app:loadMoreOffset="60dp"
+                                  app:maxDownOffset="240dp"
+                                  app:maxUpOffset="120dp"
+                                  app:refreshCompleteDelayedTime="500"
+                                  app:refreshOffset="60dp"
+    >
 
     <LinearLayout
         android:id="@+id/linear"
@@ -21,62 +23,70 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="我是标题"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:text="我是标题"/>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/content_nestscrolling"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/content_nestscrolling"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorPrimaryDark"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorGray"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorPrimary"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorGray"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorPrimaryDark"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorGray"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorPrimaryDark"/>
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-    </android.support.v4.widget.NestedScrollView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/colorPrimaryDark"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/colorGray"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/colorGray"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/colorPrimaryDark"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/colorGray"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/colorPrimaryDark"/>
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
 
     </LinearLayout>
 
-    <fanjh.mine.pullrefreshlayout.headerview.HeaderProgressView
+    <fanjh.mine.pullrefreshlayout.headerview.HeaderLayout
         android:id="@+id/nestscrolling_headerview"
         android:layout_width="match_parent"
-        android:layout_height="60dp" />
+        android:layout_height="60dp"/>
 
-    <fanjh.mine.pullrefreshlayout.footerview.FooterProgressView
+    <fanjh.mine.pullrefreshlayout.footerview.FooterLayout
         android:id="@+id/nestscrolling_footerview"
         android:layout_width="match_parent"
-        android:layout_height="60dp" />
+        android:layout_height="60dp"/>
 
 
 </fanjh.mine.pulllayout.PullLayout>

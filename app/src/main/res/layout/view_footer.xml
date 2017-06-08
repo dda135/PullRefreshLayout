@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/pulllayout_header_height"
+    android:background="#cc000000"
+    >
+
+    <FrameLayout
+        android:id="@+id/fl_normal_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        >
+
+        <TextView
+            android:id="@+id/tv_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="上拉可以加载更多"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/white"
+            />
+        
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@mipmap/ic_arrow_up"
+            android:layout_marginLeft="80dp"
+            android:layout_gravity="center_vertical"
+            />
+        
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_can_load_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/tv_can_load_hint"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:text="释放加载"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/white"
+            />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@mipmap/ic_arrow_down"
+            android:layout_marginLeft="80dp"
+            android:layout_gravity="center_vertical"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/tv_loading_hint"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:text="加载中..."
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/white"
+            />
+
+        <ImageView
+            android:id="@+id/iv_loading"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@mipmap/ic_refreshing"
+            android:layout_marginLeft="80dp"
+            android:layout_gravity="center_vertical"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_load_complete_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/tv_load_complete_hint"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:text="加载完成"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/white"
+            />
+
+    </FrameLayout>
+    
+</FrameLayout>

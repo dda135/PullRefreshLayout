@@ -38,16 +38,19 @@ public class HeaderView extends TextView implements IRefreshListener{
     }
 
     @Override
-    public void onUIPositionChanged(int oldOffset, int newOffset) {
-        if(!isBegining) {
-            setText("oldOffset-->" + oldOffset + "--newOffset-->" + newOffset);
-        }
+    public void onUIPositionChanged(int oldOffset, int newOffset, int refreshOffset) {
+
     }
 
     @Override
     public void onRefreshComplete() {
         isBegining = false;
         setText("onRefreshComplete");
+    }
+
+    @Override
+    public void onCanRefresh() {
+
     }
 
 }

@@ -100,6 +100,8 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         boolean contentFixed = array.getBoolean(R.styleable.PullLayout_contentFixed,false);
         mOption.setContentFixed(contentFixed);
         disabledNestedScrolling = array.getBoolean(R.styleable.PullLayout_disabledNestedScrolling,false);
+        int refreshCompleteDelayedTime = array.getInt(R.styleable.PullLayout_refreshCompleteDelayedTime,0);
+        mOption.setRefreshCompleteDelayed(refreshCompleteDelayedTime);
         array.recycle();
     }
 
@@ -315,6 +317,11 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
             return;
         }
         callUIPositionChangedListener(mPrevOffset, mCurrentOffset);
+        if (mCurrentOffset >= mOption.getRefreshOffset()) {
+            callCanRefreshListener();
+        } else if (mCurrentOffset <= mOption.getLoadMoreOffset()) {
+            callCanLoadMoreListener();
+        }
         if (!mOption.isContentFixed()) {
             mContentView.offsetTopAndBottom(deltaY);
         }
@@ -396,9 +403,16 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         if (!isRefreshing) {
             return;
         }
-        isRefreshing = false;
-        mScroller.trySmoothScrollToOffset(0);
         callRefreshCompleteListener();
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(null != getContext()) {
+                    isRefreshing = false;
+                    mScroller.trySmoothScrollToOffset(0);
+                }
+            }
+        },mOption.getRefreshCompleteDelayed());
     }
 
     /**
@@ -408,9 +422,16 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         if (!isLoading) {
             return;
         }
-        isLoading = false;
-        mScroller.trySmoothScrollToOffset(0);
         callLoadMoreCompleteListener();
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(null != getContext()) {
+                    isLoading = false;
+                    mScroller.trySmoothScrollToOffset(0);
+                }
+            }
+        },mOption.getLoadCompleteDelayed());
     }
 
     /**
@@ -433,12 +454,18 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         }
     }
 
+    private void callCanRefreshListener() {
+        for (IRefreshListener listener : mRefreshListeners) {
+            listener.onCanRefresh();
+        }
+    }
+
     private void callUIPositionChangedListener(int oldOffset, int newOffset) {
         for (IRefreshListener listener : mRefreshListeners) {
-            listener.onUIPositionChanged(oldOffset, newOffset);
+            listener.onUIPositionChanged(oldOffset, newOffset, mOption.getRefreshOffset());
         }
         for (ILoadMoreListener loadMoreListener : mLoadMoreListeners) {
-            loadMoreListener.onUIPositionChanged(oldOffset, newOffset);
+            loadMoreListener.onUIPositionChanged(oldOffset, newOffset, mOption.getLoadMoreOffset());
         }
     }
 
@@ -461,6 +488,13 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
             listener.onLoadMoreComplete();
         }
     }
+
+    private void callCanLoadMoreListener() {
+        for (ILoadMoreListener listener : mLoadMoreListeners) {
+            listener.onCanLoadMore();
+        }
+    }
+
     /** end **/
 
     /**

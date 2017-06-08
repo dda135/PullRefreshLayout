@@ -110,12 +110,17 @@ public class MainActivity extends FragmentActivity {
             }
 
             @Override
-            public void onUIPositionChanged(int oldOffset, int newOffset) {
+            public void onUIPositionChanged(int oldOffset, int newOffset, int refreshOffset) {
 
             }
 
             @Override
             public void onRefreshComplete() {
+
+            }
+
+            @Override
+            public void onCanRefresh() {
 
             }
         });
@@ -126,7 +131,7 @@ public class MainActivity extends FragmentActivity {
             }
 
             @Override
-            public void onUIPositionChanged(int oldOffset, int newOffset) {
+            public void onUIPositionChanged(int oldOffset, int newOffset, int loadMoreOffset) {
 
             }
 
@@ -142,6 +147,11 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onLoadMoreComplete() {
+
+            }
+
+            @Override
+            public void onCanLoadMore() {
 
             }
         });

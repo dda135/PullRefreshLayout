@@ -7,5 +7,6 @@
         <attr name="maxDownOffset" format="dimension" />
         <attr name="contentFixed" format="boolean" />
         <attr name="disabledNestedScrolling" format="boolean" />
+        <attr name="refreshCompleteDelayedTime" format="integer" />
     </declare-styleable>
 </resources>

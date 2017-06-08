@@ -9,6 +9,7 @@ package fanjh.mine.pulllayout;
 public interface IRefreshListener {
     void onBeforeRefresh();//没有达到刷新条件头部开始回弹的回调
     void onRefreshBegin();
-    void onUIPositionChanged(int oldOffset, int newOffset);
+    void onUIPositionChanged(int oldOffset, int newOffset, int refreshOffset);
     void onRefreshComplete();
+    void onCanRefresh();
 }

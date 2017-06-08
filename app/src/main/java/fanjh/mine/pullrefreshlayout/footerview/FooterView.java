@@ -33,10 +33,8 @@ public class FooterView extends TextView implements ILoadMoreListener{
     }
 
     @Override
-    public void onUIPositionChanged(int oldOffset, int newOffset) {
-        if(!isLoadMoreing) {
-            setText("oldOffset-->" + oldOffset + "--newOffset-->" + newOffset);
-        }
+    public void onUIPositionChanged(int oldOffset, int newOffset, int loadMoreOffset) {
+
     }
 
     @Override
@@ -49,6 +47,11 @@ public class FooterView extends TextView implements ILoadMoreListener{
     public void onLoadMoreComplete() {
         isLoadMoreing = false;
         setText("onLoadMoreComplete");
+    }
+
+    @Override
+    public void onCanLoadMore() {
+
     }
 
 }
