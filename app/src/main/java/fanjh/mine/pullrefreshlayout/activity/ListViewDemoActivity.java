@@ -41,15 +41,6 @@ public class ListViewDemoActivity extends Activity {
         contentListView = (ListView) findViewById(R.id.content_listview);
         MyAdapter myAdapter = new MyAdapter();
         contentListView.setAdapter(myAdapter);
-
-        pullLayout.setContentFixed(false);
-        pullLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                pullLayout.setLoadMoreOffset(pullLayout.getFooterHeight(),pullLayout.getFooterHeight() * 3);
-                pullLayout.setRefreshOffset(pullLayout.getHeaderHeight(),pullLayout.getHeaderHeight() * 3);
-            }
-        });
         /**
          * 刷新滑动监听
          */

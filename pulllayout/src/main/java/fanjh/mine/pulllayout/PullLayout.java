@@ -80,7 +80,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     public PullLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initData();
-        TypedArray array = context.obtainStyledAttributes(attrs,R.styleable.PullLayout);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.PullLayout);
         int refreshOffset = array.getDimensionPixelOffset(R.styleable.PullLayout_refreshOffset,0);
         if(0 != refreshOffset){
             mOption.setRefreshOffset(refreshOffset);
@@ -174,23 +174,23 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         int left, top;
         MarginLayoutParams lp;
         lp = (MarginLayoutParams) mContentView.getLayoutParams();
-        left = (l + getPaddingLeft() + lp.leftMargin);
+        left = (getPaddingLeft() + lp.leftMargin);
         if (mOption.isContentFixed()) {
-            top = (t + getPaddingTop() + lp.topMargin);
+            top = (getPaddingTop() + lp.topMargin);
         }else{
-            top = (t + getPaddingTop() + lp.topMargin) + mCurrentOffset;
+            top = (getPaddingTop() + lp.topMargin) + mCurrentOffset;
         }
         mContentView.layout(left, top, left + mContentView.getMeasuredWidth(), top + mContentView.getMeasuredHeight());
         if (null != mHeaderView) {
             lp = (MarginLayoutParams) mHeaderView.getLayoutParams();
-            left = (l + getPaddingLeft() + lp.leftMargin);
-            top = (t + getPaddingTop() + lp.topMargin) - mHeaderHeight + mCurrentOffset;
+            left = (getPaddingLeft() + lp.leftMargin);
+            top = (getPaddingTop() + lp.topMargin) - mHeaderHeight + mCurrentOffset;
             mHeaderView.layout(left, top, left + mHeaderView.getMeasuredWidth(), top + mHeaderView.getMeasuredHeight());
         }
         if (null != mFooterView) {
             lp = (MarginLayoutParams) mFooterView.getLayoutParams();
-            left = (l + getPaddingLeft() + lp.leftMargin);
-            top = (b - getPaddingBottom() + lp.topMargin) + mCurrentOffset;
+            left = (getPaddingLeft() + lp.leftMargin);
+            top = (b - t - getPaddingBottom() + lp.topMargin) + mCurrentOffset;
             mFooterView.layout(left, top, left + mFooterView.getMeasuredWidth(), top + mFooterView.getMeasuredHeight());
         }
     }

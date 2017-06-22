@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="pull_layout_header_height">120dp</dimen>
+    <dimen name="pull_layout_footer_height">120dp</dimen>
+    <dimen name="pull_layout_header_content_height">60dp</dimen>
+    <dimen name="pull_layout_footer_content_height">60dp</dimen>
+</resources>

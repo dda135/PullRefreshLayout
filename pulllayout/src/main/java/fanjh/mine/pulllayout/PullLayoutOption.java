@@ -1,7 +1,5 @@
 package fanjh.mine.pulllayout;
 
-import android.util.Log;
-
 /**
 * @author fanjh
 * @date 2017/4/27 9:44

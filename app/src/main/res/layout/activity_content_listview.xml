@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fanjh.mine.pulllayout.PullLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/listview_pullLayout"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:disabledNestedScrolling="false">
+<fanjh.mine.pulllayout.PullLayout android:id="@+id/listview_pullLayout"
+                                  xmlns:android="http://schemas.android.com/apk/res/android"
+                                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                                  android:layout_width="match_parent"
+                                  android:layout_height="match_parent"
+                                  android:orientation="vertical"
+                                  app:disabledNestedScrolling="false"
+                                  app:contentFixed="false"
+                                  app:maxDownOffset="@dimen/pull_layout_header_height"
+                                  app:maxUpOffset="@dimen/pull_layout_footer_height"
+                                  app:refreshOffset="@dimen/pull_layout_header_content_height"
+                                  app:loadMoreOffset="@dimen/pull_layout_footer_content_height"
+    >
 
     <ListView
         android:id="@+id/content_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <fanjh.mine.pullrefreshlayout.headerview.HeaderProgressView
+    <fanjh.mine.pulllayout.HeaderLayout
         android:id="@+id/listview_headerview"
         android:layout_width="match_parent"
-        android:layout_height="60dp" />
+        android:layout_height="@dimen/pull_layout_header_height"/>
 
-    <fanjh.mine.pullrefreshlayout.footerview.FooterProgressView
+    <fanjh.mine.pulllayout.FooterLayout
         android:id="@+id/listview_footerview"
         android:layout_width="match_parent"
-        android:layout_height="60dp" />
+        android:layout_height="@dimen/pull_layout_footer_height"/>
 
 
 </fanjh.mine.pulllayout.PullLayout>
