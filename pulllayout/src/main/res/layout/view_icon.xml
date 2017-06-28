@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_header_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <fanjh.mine.pulllayout.EasyPathView
+            android:id="@+id/epv_header_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            custom:epvAnimMode="together"
+            custom:epvDynamic="false"
+            custom:epvFixedHeight="100"
+            custom:epvFixedWidth="100"
+            custom:epvPathString="@string/icon_path"
+            custom:epvState="hide"
+            custom:epvStrokeColor="#00D3C2"
+            custom:epvStrokeFixedWidth="4"
+            custom:epvStrokeIsRound="true"/>
+
+        <fanjh.mine.pulllayout.EasyPathView
+            android:id="@+id/epv_header_icon_light"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            custom:epvAnimDurations="500"
+            custom:epvAnimMode="together"
+            custom:epvDynamic="true"
+            custom:epvFixedHeight="100"
+            custom:epvFixedWidth="100"
+            custom:epvPathString="@string/icon_light_path"
+            custom:epvState="hide"
+            custom:epvStrokeColor="#ffffff"
+            custom:epvStrokeFixedWidth="4"
+            custom:epvStrokeIsRound="true"
+            />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_header_hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        />
+
+</LinearLayout>
+
+

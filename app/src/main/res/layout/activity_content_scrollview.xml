@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:maxDownOffset="240dp"
-    app:maxUpOffset="120dp"
-    app:refreshOffset="60dp"
+    app:maxUpOffset="240dp"
+    app:refreshOffset="120dp"
     app:loadMoreOffset="60dp"
     app:contentFixed="false"
     app:disabledNestedScrolling="false">
@@ -55,10 +55,10 @@
     </ScrollView>
 
 
-    <fanjh.mine.pullrefreshlayout.headerview.HeaderProgressView
+    <fanjh.mine.pulllayout.IconHeadLayout
         android:id="@+id/scrollview_headerview"
         android:layout_width="match_parent"
-        android:layout_height="60dp" />
+        android:layout_height="120dp" />
 
     <fanjh.mine.pullrefreshlayout.footerview.FooterProgressView
         android:id="@+id/scrollview_footerview"

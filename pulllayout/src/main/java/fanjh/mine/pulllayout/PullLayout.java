@@ -79,6 +79,8 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
 
     public PullLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setWillNotDraw(false);
+        setAlwaysDrawnWithCacheEnabled(false);
         initData();
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.PullLayout);
         int refreshOffset = array.getDimensionPixelOffset(R.styleable.PullLayout_refreshOffset,0);
@@ -284,7 +286,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
                 isOnTouch = false;
                 if (mCurrentOffset > 0) {
                     tryPerformRefresh();
-                } else {
+                } else if(mCurrentOffset < 0){
                     tryPerformLoading();
                 }
                 break;
@@ -770,20 +772,27 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         public void run() {
             boolean isFinished = (!mScroller.computeScrollOffset() || mScroller.isFinished());
             if (isFinished) {
+                if(mScroller.getCurrY() != mLastY){//Scroller会在一些情况下突然结束，这里就是处理这个情况
+                    checkScrollerAndRun();
+                }
                 end();
             } else {
-                int y = mScroller.getCurrY();
-                int deltaY = (y - mLastY);
-                boolean isDown = ((mPrevOffset == mOption.getRefreshOffset()) && deltaY > 0);
-                boolean isUp = ((mPrevOffset == mOption.getLoadMoreOffset()) && deltaY < 0);
-                if (isDown || isUp) {//不需要进行多余的滑动
-                    end();
-                    return;
-                }
-                updatePos(deltaY);
-                mLastY = y;
-                post(this);
+                checkScrollerAndRun();
             }
+        }
+
+        private void checkScrollerAndRun(){
+            int y = mScroller.getCurrY();
+            int deltaY = (y - mLastY);
+            boolean isDown = ((mPrevOffset == mOption.getRefreshOffset()) && deltaY > 0);
+            boolean isUp = ((mPrevOffset == mOption.getLoadMoreOffset()) && deltaY < 0);
+            if (isDown || isUp) {//不需要进行多余的滑动
+                end();
+                return;
+            }
+            updatePos(deltaY);
+            mLastY = y;
+            post(this);
         }
 
         /**

@@ -5,8 +5,10 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -37,7 +39,13 @@ public class HeaderLayout extends FrameLayout implements IRefreshListener {
 
     public HeaderLayout(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        View view = LayoutInflater.from(context).inflate(R.layout.view_header, this, true);
+        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelOffset(R.dimen.pull_layout_header_height)));
+        setBackgroundColor(getResources().getColor(R.color.pull_layout_header_background));
+        View view = LayoutInflater.from(context).inflate(R.layout.view_header, this,false);
+        FrameLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,getResources().getDimensionPixelOffset(R.dimen.pull_layout_header_content_height));
+        params.gravity = Gravity.BOTTOM;
+        view.setBackgroundColor(getResources().getColor(R.color.pull_layout_header_background));
+        addView(view,params);
         mBeginView = view.findViewById(R.id.fl_normal_layout);
         mCanRefreshView = view.findViewById(R.id.fl_can_refresh_layout);
         mRefreshingView = view.findViewById(R.id.fl_refreshing_layout);
