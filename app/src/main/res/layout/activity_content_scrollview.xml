@@ -10,7 +10,8 @@
     app:refreshOffset="120dp"
     app:loadMoreOffset="60dp"
     app:contentFixed="false"
-    app:disabledNestedScrolling="false">
+    app:disabledNestedScrolling="false"
+    app:movieRatio="0.5">
 
     <ScrollView
         android:id="@+id/content_scrollview"

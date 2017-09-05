@@ -1,5 +1,7 @@
 package fanjh.mine.pulllayout;
 
+import android.widget.Scroller;
+
 /**
 * @author fanjh
 * @date 2017/4/27 9:44
@@ -9,6 +11,8 @@ package fanjh.mine.pulllayout;
  * 2.整体的偏移量以初始位置为准，向下为真，向上为负
 **/
 public class PullLayoutOption {
+    public static final int DEFAULT_SMOOTH_TIME = 300;//ms
+    public static final int AUTO_REFRESH_SMOOTH_TIME = 200;//ms,自动刷新和自动加载时布局弹出时间
     //触发顶部刷新的偏移量
     private int mRefreshOffset;
     //布局向下滑动的最大偏移量，要大于等于mRefreshOffset才能使刷新有效
@@ -27,6 +31,12 @@ public class PullLayoutOption {
     private int mRefreshCompleteDelayed;
     //调用加载完成之后实际开始操作的延时
     private int mLoadCompleteDelayed;
+    //自动刷新的时候顶部/底部弹出的时间
+    private int mAutoRefreshPopTime;
+    //顶部/底部回弹时间
+    private int mKickBackTime;
+    //缓慢移动Scroller
+    private Scroller mSmoothScroller;
 
     public interface OnCheckHandler{
         boolean canUpTpDown();
@@ -79,6 +89,7 @@ public class PullLayoutOption {
     }
 
     public float getMoveRatio() {
+        mMoveRatio = Math.min(Math.max(0,mMoveRatio),1);
         return mMoveRatio;
     }
 
@@ -126,5 +137,29 @@ public class PullLayoutOption {
 
     public void setLoadCompleteDelayed(int mLoadCompleteDelayed) {
         this.mLoadCompleteDelayed = mLoadCompleteDelayed;
+    }
+
+    public int getAutoRefreshPopTime() {
+        return 0 == mAutoRefreshPopTime?AUTO_REFRESH_SMOOTH_TIME:mAutoRefreshPopTime;
+    }
+
+    public void setAutoRefreshPopTime(int mAutoRefreshPopTime) {
+        this.mAutoRefreshPopTime = mAutoRefreshPopTime;
+    }
+
+    public int getKickBackTime() {
+        return 0 == mKickBackTime?DEFAULT_SMOOTH_TIME:mKickBackTime;
+    }
+
+    public void setKickBackTime(int mKickBackTime) {
+        this.mKickBackTime = mKickBackTime;
+    }
+
+    public Scroller getSmoothScroller() {
+        return mSmoothScroller;
+    }
+
+    public void setSmoothScroller(Scroller mSmoothScroller) {
+        this.mSmoothScroller = mSmoothScroller;
     }
 }

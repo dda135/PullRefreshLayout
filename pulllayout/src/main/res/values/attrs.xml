@@ -8,6 +8,7 @@
         <attr name="contentFixed" format="boolean" />
         <attr name="disabledNestedScrolling" format="boolean" />
         <attr name="refreshCompleteDelayedTime" format="integer" />
+        <attr name="movieRatio" format="float" />
     </declare-styleable>
     <declare-styleable name="EasyPathView">
         <attr name="epvFixedWidth" format="integer"/>

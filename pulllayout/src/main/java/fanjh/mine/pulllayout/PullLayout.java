@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 
 import java.util.ArrayList;
@@ -22,48 +23,48 @@ import java.util.ArrayList;
 /**
  * @author fanjh
  * @date 2017/4/27 9:34
- * @description 可能具有顶部刷新和底部加载功能的布局
- * @note 视图的添加顺序为内容、头部（非必要）、底部（非必要）
+ * @description you can use custom condition to refresh/load and add listener to handle some state
+ * @note child[0]：content(must)
+ *       child[1]：header(non-essential)
+ *       child[2]：footer(non-essential)
  **/
 public class PullLayout extends ViewGroup implements NestedScrollingParent,NestedScrollingChild {
-    //内容视图
+    //content
     private View mContentView;
-    //顶部刷新的时候会显示的视图
+    //show this view when refreshing
     private View mHeaderView;
-    //底部加载的时候会显示的视图
+    //show this view when loading
     private View mFooterView;
-    //当前是否在触摸状态下
+    //in touch event mode
     private boolean isOnTouch;
+    //params option
     private PullLayoutOption mOption;
-    //头部视图的高度
+    //headerView's height
     private int mHeaderHeight;
-    //底部视图的高度
+    //footerView's height
     private int mFooterHeight;
-    //上次的触摸事件坐标
+    //last MotionEvent's coordinate
     private Point mLastPoint;
-    //当前偏移量
+    //layout current scroll offset
     private int mCurrentOffset;
-    //上次的偏移量
+    //last scroll offset
     private int mPrevOffset;
     private int mTouchSlop;
-    //刷新和加载更多的回调
+    //refresh/load state change listener
     private ArrayList<IRefreshListener> mRefreshListeners;
     private ArrayList<ILoadMoreListener> mLoadMoreListeners;
-    //当前是否在刷新中
+    //is refreshing
     private boolean isRefreshing;
-    //当前是否在加载中
+    //is loading
     private boolean isLoading;
-    //缓慢滑动工作者
+    //use to smooth scroll
     private ScrollerWorker mScroller;
-    //主要用于标记当前事件的意义
-    private boolean canUpIntercept;
-    private boolean canDownIntercept;
-    //一次拦截事件的时候当前是否可以顶部或底部刷新
+    //sign can UP/DOWN scroll
     private boolean canUp;
     private boolean canDown;
-    //当前是否处于嵌套滑动中
+    //is in NestedScrolling state
     private boolean isNestedScrolling;
-    //是否允许嵌套滑动，没有使用isNestedScrolling是因为版本问题
+    //can use NestedScrolling
     private boolean disabledNestedScrolling;
 
     private NestedScrollingParentHelper mParentHelper;
@@ -99,6 +100,8 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         if(0 != maxDownOffset){
             mOption.setMaxDownOffset(maxDownOffset);
         }
+        float movieRatio = array.getFloat(R.styleable.PullLayout_movieRatio,1);
+        mOption.setMoveRatio(movieRatio);
         boolean contentFixed = array.getBoolean(R.styleable.PullLayout_contentFixed,false);
         mOption.setContentFixed(contentFixed);
         disabledNestedScrolling = array.getBoolean(R.styleable.PullLayout_disabledNestedScrolling,false);
@@ -108,26 +111,33 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     }
 
     private void initData() {
-        mOption = new PullLayoutOption();
+        if(null == mOption) {
+            mOption = new PullLayoutOption();
+        }
         mLastPoint = new Point();
         ViewConfiguration configuration = ViewConfiguration.get(getContext());
         mTouchSlop = configuration.getScaledTouchSlop();
         mRefreshListeners = new ArrayList<>();
         mLoadMoreListeners = new ArrayList<>();
-        mScroller = new ScrollerWorker(getContext());
+        mScroller = new ScrollerWorker(getContext(),mOption.getSmoothScroller());
         mParentHelper = new NestedScrollingParentHelper(this);
         mChildHelper = new NestedScrollingChildHelper(this);
+    }
+
+    public void setOption(PullLayoutOption mOption) {
+        this.mOption = mOption;
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         int childCount = getChildCount();
+        //you should care child view position
         switch (childCount) {
-            case 1://这种时候默认只有一个内容视图
+            case 1:
                 mContentView = getChildAt(0);
                 break;
-            case 2://默认优先支持顶部刷新
+            case 2:
                 mContentView = getChildAt(0);
                 mHeaderView = getChildAt(1);
                 break;
@@ -137,14 +147,11 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
                 mFooterView = getChildAt(2);
                 break;
             default:
-                throw new IllegalArgumentException("必须包括1到3个子视图");
+                throw new IllegalArgumentException("must cover 1-3 child view");
         }
         checkHeaderAndFooterAndAddListener();
     }
 
-    /**
-     * 检查头部和底部是否为监听，是的话添加到监听回调列表中
-     */
     private void checkHeaderAndFooterAndAddListener() {
         if (mHeaderView instanceof IRefreshListener) {
             mRefreshListeners.add((IRefreshListener) mHeaderView);
@@ -197,9 +204,6 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         }
     }
 
-    /**
-     * 处理LayoutParams支持Margin相关属性
-     **/
     @Override
     protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
         return p != null && p instanceof LayoutParams;
@@ -261,9 +265,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
                     canUp = mOption.canUpToDown();
                     canDown = mOption.canDownToUp();
                     Log.d(getClass().getSimpleName(), "canUp-->" + canUp + "--canDown-->" + canDown + "--deltaY-->" + deltaY);
-                    canUpIntercept = (deltaY > 0 && canUp);
-                    canDownIntercept = (deltaY < 0 && canDown);
-                    return canUpIntercept || canDownIntercept;
+                    return (deltaY > 0 && canUp) || (deltaY < 0 && canDown);
                 }
                 return false;
         }
@@ -279,7 +281,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         switch (MotionEventCompat.getActionMasked(event)) {
             case MotionEvent.ACTION_MOVE:
                 isOnTouch = true;
-                updatePos((int) (event.getY() - mLastPoint.y));
+                updatePos((int) (mOption.getMoveRatio() * (event.getY() - mLastPoint.y)));
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
@@ -296,18 +298,18 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     }
 
     /**
-     * 修改偏移量，改变视图位置
+     * try scroll content/header/footer
      *
-     * @param deltaY 当前位置的偏移量
+     * @param deltaY scroll deltaY
      */
     private void updatePos(int deltaY) {
-        if (!hasHeaderOrFooter() || deltaY == 0) {//不需要偏移
+        if (!hasHeaderOrFooter() || deltaY == 0) {
             return;
         }
         if (isOnTouch) {
-            if (!canUp && (mCurrentOffset + deltaY > 0)) {//此时偏移量不应该>0
+            if (!canUp && (mCurrentOffset + deltaY > 0)) {
                 deltaY = (0 - mCurrentOffset);
-            } else if (!canDown && (mCurrentOffset + deltaY < 0)) {//此时偏移量不应该<0
+            } else if (!canDown && (mCurrentOffset + deltaY < 0)) {
                 deltaY = (0 - mCurrentOffset);
             }
         }
@@ -315,7 +317,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         mCurrentOffset += deltaY;
         mCurrentOffset = Math.max(Math.min(mCurrentOffset, mOption.getMaxDownOffset()), mOption.getMaxUpOffset());
         deltaY = mCurrentOffset - mPrevOffset;
-        if (deltaY == 0) {//不需要偏移
+        if (deltaY == 0) {
             return;
         }
         callUIPositionChangedListener(mPrevOffset, mCurrentOffset);
@@ -337,18 +339,15 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     }
 
     /**
-     * 是否有头部或者底部视图
+     * has Header or Footer
      *
-     * @return true是
+     * @return true has
      */
     private boolean hasHeaderOrFooter() {
         return null != mHeaderView || null != mFooterView;
     }
 
 
-    /**
-     * 尝试处理加载更多
-     */
     private void tryPerformLoading() {
         if (isOnTouch || isLoading || isNestedScrolling) {
             return;
@@ -363,16 +362,13 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         }
     }
 
-    /**
-     * 尝试处理刷新回调
-     */
     private void tryPerformRefresh() {
-        if (isOnTouch || isRefreshing || isNestedScrolling) {//触摸中或者刷新中不进行回调
+        if (isOnTouch || isRefreshing || isNestedScrolling) {
             return;
         }
         if (mCurrentOffset >= mOption.getRefreshOffset()) {
             startRefreshing();
-        } else {//没有达到刷新条件，还原状态
+        } else {
             mScroller.trySmoothScrollToOffset(0);
             if(mCurrentOffset > 0) {
                 callBeforeRefreshListener();
@@ -380,18 +376,12 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         }
     }
 
-    /**
-     * 处理刷新
-     */
     private void startRefreshing() {
         isRefreshing = true;
         callRefreshBeginListener();
         mScroller.trySmoothScrollToOffset(mOption.getRefreshOffset());
     }
 
-    /**
-     * 处理加载
-     */
     private void startLoading() {
         isLoading = true;
         callLoadMoreBeginListener();
@@ -399,7 +389,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     }
 
     /**
-     * 刷新完成
+     * when refresh completed,you should call this method to notify PullLayout
      */
     public void refreshComplete() {
         if (!isRefreshing) {
@@ -418,7 +408,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     }
 
     /**
-     * 加载完成
+     * when loading completed,you should call this method to notify PullLayout
      */
     public void loadingComplete() {
         if (!isLoading) {
@@ -436,9 +426,6 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         },mOption.getLoadCompleteDelayed());
     }
 
-    /**
-     * 回调刷新的各种监听
-     **/
     private void callBeforeRefreshListener(){
         for (IRefreshListener listener : mRefreshListeners) {
             listener.onBeforeRefresh();
@@ -471,9 +458,6 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         }
     }
 
-    /**
-     * 回调加载的监听
-     */
     private  void callBeforeLoadMoreListener(){
         for (ILoadMoreListener listener : mLoadMoreListeners) {
             listener.onBeforeLoad();
@@ -499,9 +483,8 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
 
     /** end **/
 
-    /**
-     * 添加和移除监听
-     **/
+    /** use some methods to add/remove listener **/
+
     public void addRefreshListener(IRefreshListener listener) {
         mRefreshListeners.add(listener);
     }
@@ -520,53 +503,24 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     /** end **/
 
     /**
-     * 配置相关
+     * use this method to add condition
+     * check how can refresh/load
      **/
     public void setOnCheckHandler(PullLayoutOption.OnCheckHandler handler) {
         mOption.setOnCheckHandler(handler);
     }
 
     /**
-     * 在滑动过程中内容视图是否跟着移动
-     * @param contentFixed true不移动，默认false移动
-     */
-    public void setContentFixed(boolean contentFixed){
-        mOption.setContentFixed(contentFixed);
-    }
-
-    /**
-     * 必须在外面设置触发加载更多的偏移量以及底部上拉的最大偏移量
-     * @param loadMoreOffset 触发加载更多的偏移量>0
-     * @param maxUpOffset 底部上拉的最大偏移量>0
-     */
-    public void setLoadMoreOffset(int loadMoreOffset,int maxUpOffset) {
-        if(loadMoreOffset > maxUpOffset){
-            throw new IllegalArgumentException("触发加载更多偏移量不能大于底部上拉的最大偏移量！");
-        }
-        mOption.setLoadMoreOffset(loadMoreOffset).setMaxUpOffset(maxUpOffset);
-    }
-
-    /**
-     * 必须在外面设置触发刷新的偏移量以及顶部下拉的最大偏移量
-     * @param refreshOffset 触发刷新的偏移量>0
-     * @param maxDownOffset 顶部下拉的最大偏移量>0
-     */
-    public void setRefreshOffset(int refreshOffset,int maxDownOffset) {
-        if(refreshOffset > maxDownOffset){
-            throw new IllegalArgumentException("触发刷新的偏移量不能大于顶部下拉的最大偏移量！");
-        }
-        mOption.setRefreshOffset(refreshOffset).setMaxDownOffset(maxDownOffset);
-    }
-
-    /**
-     * 获取头部视图的高度，在设置有头部视图并且测量完成后才有值
+     * get header's height
+     * @note you should use this method when completed measure
      */
     public int getHeaderHeight() {
         return mHeaderHeight;
     }
 
     /**
-     * 获取底部视图的高度，在设置有地不是图并且测量完成后才有值
+     * get footer's height
+     * @note you should use this method when completed measure
      */
     public int getFooterHeight() {
         return mFooterHeight;
@@ -575,7 +529,9 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     /** end **/
 
     /**
-     * 处理自动刷新
+     * use to auto refresh
+     * @note should use this method when completed measure and layout,for example,
+     * use getViewTreeObserver().addonPreDrawListener(...)
      */
     public void autoRefresh() {
         boolean hasView = (mHeaderView != null && isEnabled());
@@ -584,13 +540,15 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         if (!hasView || isWorking || isTouch) {
             return;
         }
-        mScroller.mSmoothScrollTime = ScrollerWorker.AUTO_REFRESH_SMOOTH_TIME;
+        mScroller.mSmoothScrollTime = mOption.getAutoRefreshPopTime();
         startRefreshing();
-        mScroller.mSmoothScrollTime = ScrollerWorker.DEFAULT_SMOOTH_TIME;
+        mScroller.mSmoothScrollTime = mOption.getKickBackTime();
     }
 
     /**
-     * 处理自动加载
+     * use to auto load
+     * @note should use this method when completed measure and layout,for example,
+     * use getViewTreeObserver().addonPreDrawListener(...)
      */
     public void autoLoading() {
         boolean hasView = (mFooterView != null && isEnabled());
@@ -599,14 +557,14 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         if (!hasView || isWorking || isTouch) {
             return;
         }
-        mScroller.mSmoothScrollTime = ScrollerWorker.AUTO_REFRESH_SMOOTH_TIME;
+        mScroller.mSmoothScrollTime = mOption.getAutoRefreshPopTime();
         startLoading();
-        mScroller.mSmoothScrollTime = ScrollerWorker.DEFAULT_SMOOTH_TIME;
+        mScroller.mSmoothScrollTime = mOption.getKickBackTime();
     }
 
     @Override
     public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-        //只接收竖直方向上面的嵌套滑动
+        //only handle Vertical scroll
         boolean isVerticalScroll = (nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL);
         boolean canTouchMove = isEnabled() && hasHeaderOrFooter();
         return !disabledNestedScrolling && isVerticalScroll && canTouchMove;
@@ -625,7 +583,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
                 startRefreshing();
             } else if(mCurrentOffset <= mOption.getLoadMoreOffset()){
                 startLoading();
-            } else {//没有达到刷新条件，还原状态
+            } else {//Not up to refresh condition
                 mScroller.trySmoothScrollToOffset(0);
                 if(mCurrentOffset < 0){
                     callBeforeLoadMoreListener();
@@ -655,7 +613,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
             int sureOffset = Math.min(Math.max(minOffset,nextOffset),maxOffset);
             int deltaY = sureOffset - mCurrentOffset;
             consumed[1] = (-deltaY);
-            updatePos(deltaY);
+            updatePos((int) (mOption.getMoveRatio() * deltaY));
         }
         dispatchNestedPreScroll(dx, dy, consumed, null);
     }
@@ -674,7 +632,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
             if(canUpToDown || canDownToUp){
                 isOnTouch = true;
                 isNestedScrolling = true;
-                updatePos(-dyUnconsumed);
+                updatePos((int) (mOption.getMoveRatio() * -dyUnconsumed));
                 dyConsumed = dyUnconsumed;
                 dyUnconsumed = 0;
             }
@@ -747,32 +705,28 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     }
 
     /**
-     * 处理SmoothScroll
+     * handle smooth scroll
      */
     private class ScrollerWorker implements Runnable {
-        public static final int DEFAULT_SMOOTH_TIME = 400;//ms
-        public static final int AUTO_REFRESH_SMOOTH_TIME = 200;//ms,自动刷新和自动加载时布局弹出时间
         private int mSmoothScrollTime;
-        private int mLastY;//上次的Y坐标偏移量
-        private Scroller mScroller;//间隔计算执行者
-        private Context mContext;//上下文
-        private boolean isRunning;//当前是否运行中
+        private int mLastY;//last calculate pointY，use to calculate deltaY
+        private Scroller mScroller;
+        private Context mContext;
+        private boolean isRunning;//scroller is running？
 
-        public ScrollerWorker(Context mContext) {
+        public ScrollerWorker(Context mContext,Scroller scroller) {
             this.mContext = mContext;
-            mScroller = new Scroller(mContext);
-            mSmoothScrollTime = DEFAULT_SMOOTH_TIME;
-        }
-
-        public void setSmoothScrollTime(int mSmoothScrollTime) {
-            this.mSmoothScrollTime = mSmoothScrollTime;
+            mScroller = null != scroller?scroller:new Scroller(mContext,new DecelerateInterpolator());
+            mSmoothScrollTime = mOption.getKickBackTime();
         }
 
         @Override
         public void run() {
             boolean isFinished = (!mScroller.computeScrollOffset() || mScroller.isFinished());
             if (isFinished) {
-                if(mScroller.getCurrY() != mLastY){//Scroller会在一些情况下突然结束，这里就是处理这个情况
+                //some case,Scroller will end unexpected
+                //should check it
+                if(mScroller.getCurrY() != mLastY){
                     checkScrollerAndRun();
                 }
                 end();
@@ -781,12 +735,16 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
             }
         }
 
+        /**
+         * check scroller state
+         * It will continue scrolling when scroller's state is not end
+         */
         private void checkScrollerAndRun(){
             int y = mScroller.getCurrY();
             int deltaY = (y - mLastY);
             boolean isDown = ((mPrevOffset == mOption.getRefreshOffset()) && deltaY > 0);
             boolean isUp = ((mPrevOffset == mOption.getLoadMoreOffset()) && deltaY < 0);
-            if (isDown || isUp) {//不需要进行多余的滑动
+            if (isDown || isUp) {//don't should scroll
                 end();
                 return;
             }
@@ -796,9 +754,9 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         }
 
         /**
-         * 尝试缓慢滑动到指定偏移量
+         * try smooth scroll to target offset
          *
-         * @param targetOffset 需要滑动到的偏移量
+         * @param targetOffset target offset
          */
         public void trySmoothScrollToOffset(int targetOffset) {
             if (!hasHeaderOrFooter()) {
@@ -814,7 +772,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         }
 
         /**
-         * 结束Scroller
+         * only end scroller
          */
         private void endScroller() {
             if (!mScroller.isFinished()) {
@@ -824,7 +782,7 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         }
 
         /**
-         * 停止并且还原滑动工作
+         * end Scroller and reset params
          */
         public void end() {
             removeCallbacks(this);
