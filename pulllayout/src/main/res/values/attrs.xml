@@ -9,6 +9,7 @@
         <attr name="disabledNestedScrolling" format="boolean" />
         <attr name="refreshCompleteDelayedTime" format="integer" />
         <attr name="movieRatio" format="float" />
+        <attr name="canDisallowInterceptorTouchEvent" format="boolean" />
     </declare-styleable>
     <declare-styleable name="EasyPathView">
         <attr name="epvFixedWidth" format="integer"/>

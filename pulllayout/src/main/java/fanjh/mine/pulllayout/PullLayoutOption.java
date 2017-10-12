@@ -37,6 +37,8 @@ public class PullLayoutOption {
     private int mKickBackTime;
     //缓慢移动Scroller
     private Scroller mSmoothScroller;
+    //是否允许子布局禁止当前视图拦截事件，默认允许
+    private boolean canDisallowInterceptorTouchEvent = true;
 
     public interface OnCheckHandler{
         boolean canUpTpDown();
@@ -162,4 +164,13 @@ public class PullLayoutOption {
     public void setSmoothScroller(Scroller mSmoothScroller) {
         this.mSmoothScroller = mSmoothScroller;
     }
+
+    public boolean isCanDisallowInterceptorTouchEvent() {
+        return canDisallowInterceptorTouchEvent;
+    }
+
+    public void setCanDisallowInterceptorTouchEvent(boolean canDisallowInterceptorTouchEvent) {
+        this.canDisallowInterceptorTouchEvent = canDisallowInterceptorTouchEvent;
+    }
+
 }
