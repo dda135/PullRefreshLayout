@@ -1,7 +1,16 @@
 # PullRefreshLayout
+已知问题：
 1.在遇到低于23.0.0版本的RecyclerView的时候，因为RecyclerView本身对于Nested的支持不完全，所以这种时候不建议使用nested模式。
-2.稍微解释一下添加一个拦截属性的意义，比方说一个RecyclerView默认在move的时候是禁止父布局拦截事件的，
-但是有的时候可能你希望RecyclerView划到顶部的时候要开始刷新，这个属性可以帮助到你。
+2.稍微解释一下添加一个canDisallowInterceptorTouchEvent的意义，比方说一个RecyclerView默认在move的时候是禁止父布局拦截事件的，
+但是有的时候可能你希望RecyclerView划到顶部的时候就要触发顶部刷新事件，这个属性可以帮助到你。
+3.在使用autoRefresh这种方法的时候，和SwipeRefreshLayout一样，我建议在onPreDraw中执行，保证视图在绘制和测量一次之后进行
+使用说明：
+1.支持固定视图内容的模式，类似SwipeRefreshLayout
+2.支持滑动阻尼比例
+3.支持自定义滑动条件，从而实现支持不同子布局
+4.头部视图等都是推荐自己实现的，包括记录是否刷新中等状态，从而做到轻松的分离和组合
+5.支持刷新完成后延时，可以做到今日头条拉取的停顿展示效果
+等等
 ![效果图.gif](http://upload-images.jianshu.io/upload_images/2406298-759c803c0ee295d7.gif?imageMogr2/auto-orient/strip)
 ```
 <?xml version="1.0" encoding="utf-8"?>
