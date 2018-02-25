@@ -13,6 +13,13 @@
 等等<br/>
 更多细节解释在http://www.jianshu.com/p/8bc3310eb404<br/>
 ![效果图.gif](http://upload-images.jianshu.io/upload_images/2406298-759c803c0ee295d7.gif?imageMogr2/auto-orient/strip)
+
+usage  
+------- 
+```
+compile 'com.github.fanjinhao:pull-refresh-layout:1.0.0'
+```
+
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <fanjh.mine.pulllayout.PullLayout android:id="@+id/nestscrolling_pullLayout"
@@ -198,3 +205,4 @@
             }
         });
 ```
+更多可以看代码里面的demo
