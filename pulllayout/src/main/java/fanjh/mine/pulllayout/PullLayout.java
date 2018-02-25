@@ -3,7 +3,6 @@ package fanjh.mine.pulllayout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Point;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.NestedScrollingChildHelper;
 import android.support.v4.view.NestedScrollingParent;
@@ -19,6 +18,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author fanjh
@@ -27,8 +27,14 @@ import java.util.ArrayList;
  * @note child[0]：content(must)
  *       child[1]：header(non-essential)
  *       child[2]：footer(non-essential)
+ * ----------------------------
+ * update by fanjh on 2018/2/25
+ * support multi pointer touch
+ * ----------------------------
  **/
 public class PullLayout extends ViewGroup implements NestedScrollingParent,NestedScrollingChild {
+    private static final int INVALID_POINTID = -1;
+
     //内容视图
     private View mContentView;
     //顶部刷新的时候会显示的视图
@@ -73,6 +79,9 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
     private NestedScrollingChildHelper mChildHelper;
 
     private OnSizeChangedCallback mOnSizeChangedCallback;
+
+    private int mActivePointId;
+    private List<Integer> mPointIdList = new ArrayList<>();
 
     public interface OnSizeChangedCallback{
         void onSizeChanged(int oldh, int h);
@@ -281,10 +290,22 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         if (!isEnabled() || !hasHeaderOrFooter() || isRefreshing || isLoading || isNestedScrolling) {
             return false;
         }
-        switch (MotionEventCompat.getActionMasked(event)) {
+        int pointerIndex = event.getActionIndex();
+        int pointerId = event.getPointerId(pointerIndex);
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                mActivePointId = pointerId;
+                mLastPoint.set((int) event.getX(pointerIndex), (int) event.getY(pointerIndex));
+                mPointIdList.add(pointerId);
+                break;
             case MotionEvent.ACTION_MOVE:
-                int x = (int) event.getX();
-                int y = (int) event.getY();
+                int activeIndex = event.findPointerIndex(mActivePointId);
+                if(activeIndex < 0){
+                    return false;
+                }
+                int x = (int) event.getX(activeIndex);
+                int y = (int) event.getY(activeIndex);
                 int deltaY = (y - mLastPoint.y);
                 int dy = Math.abs(deltaY);
                 int dx = Math.abs(x - mLastPoint.x);
@@ -298,9 +319,39 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
                     return canUpIntercept || canDownIntercept;
                 }
                 return false;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                mActivePointId = INVALID_POINTID;
+                mPointIdList.clear();
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                resetTouch(event);
+                break;
+            default:
+                break;
         }
-        mLastPoint.set((int) event.getX(), (int) event.getY());
         return false;
+    }
+
+    /**
+     * 通过栈结构进行手指回溯操作
+     * @param event 当前事件对象
+     */
+    private void resetTouch(MotionEvent event){
+        int currentReleaseIndex = event.getActionIndex();
+        int currentReleaseId = event.getPointerId(currentReleaseIndex);
+        mPointIdList.remove((Integer) currentReleaseId);
+        while(mPointIdList.size() > 0){
+            mActivePointId = mPointIdList.get(mPointIdList.size() - 1);
+            int pointIndex = event.findPointerIndex(mActivePointId);
+            if (pointIndex < 0){
+                mPointIdList.remove(mPointIdList.size() - 1);
+                continue;
+            }
+            mLastPoint.set((int)event.getX(pointIndex),(int)event.getY(pointIndex));
+            return;
+        }
+        mActivePointId = INVALID_POINTID;
     }
 
     @Override
@@ -308,13 +359,28 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         if (!isEnabled() || !hasHeaderOrFooter() || isRefreshing || isLoading || isNestedScrolling) {
             return false;
         }
-        switch (MotionEventCompat.getActionMasked(event)) {
+        int pointIndex = event.getActionIndex();
+        int pointId = event.getPointerId(pointIndex);
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                mActivePointId = pointId;
+                mLastPoint.set((int)event.getX(pointIndex),(int)event.getY(pointIndex));
+                mPointIdList.add(mActivePointId);
+                break;
             case MotionEvent.ACTION_MOVE:
+                int activePointIndex = event.findPointerIndex(mActivePointId);
+                if(activePointIndex < 0){
+                    return false;
+                }
                 isOnTouch = true;
-                updatePos((int) (mOption.getMoveRatio() * (event.getY() - mLastPoint.y)));
+                updatePos((int) (mOption.getMoveRatio() * (event.getY(activePointIndex) - mLastPoint.y)));
+                mLastPoint.set((int)event.getX(activePointIndex),(int)event.getY(activePointIndex));
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                mActivePointId = INVALID_POINTID;
+                mPointIdList.clear();
                 isOnTouch = false;
                 if (mCurrentOffset > 0) {
                     tryPerformRefresh();
@@ -322,8 +388,12 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
                     tryPerformLoading();
                 }
                 break;
+            case MotionEvent.ACTION_POINTER_UP:
+                resetTouch(event);
+                break;
+            default:
+                break;
         }
-        mLastPoint.set((int) event.getX(), (int) event.getY());
         return true;
     }
 
