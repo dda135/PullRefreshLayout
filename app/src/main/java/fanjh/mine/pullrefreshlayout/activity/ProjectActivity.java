@@ -1,11 +1,43 @@
 package fanjh.mine.pullrefreshlayout.activity;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.KeyguardManager;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
 import android.support.annotation.Nullable;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
+import android.support.v4.os.CancellationSignal;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 
 import fanjh.mine.pullrefreshlayout.R;
 
@@ -22,6 +54,7 @@ public class ProjectActivity extends Activity{
     Button btnRecycleView;
     Button btnNestScrooling;
     Button btnAutoRefreshOrLoad;
+    Dialog dialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +62,13 @@ public class ProjectActivity extends Activity{
         setContentView(R.layout.activity_project);
         initView();
         initListener();
+        Log.i("tag1","onCreate");
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.i("tag1","onConfigurationChanged");
     }
 
     private void initView(){
@@ -42,6 +82,7 @@ public class ProjectActivity extends Activity{
 
     private void initListener(){
         contentFixed.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ProjectActivity.this,ContentFixedActivity.class));
@@ -83,6 +124,12 @@ public class ProjectActivity extends Activity{
             }
         });
 
+    }
+
+    private void showDialog(){
+        dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle("请校验指纹！");
+        dialog.show();
     }
 
 }

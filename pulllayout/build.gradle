@@ -23,16 +23,16 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:27.0.2'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:27.1.0'
 }
 
 publish {
     userOrg = '1736880019'//bintray.com用户名
     groupId = 'com.github.fanjinhao'//jcenter上的路径
     artifactId = 'pull-refresh-layout'//项目名称
-    publishVersion = '1.0.0'//版本号
+    publishVersion = '1.0.2'//版本号
     desc = 'Oh hi, this is a nice description for a project, right?'//描述，不重要
     website = 'https://github.com/dda135/PullRefreshLayout'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
     repoName = 'android'//bintray中创建的repo名称

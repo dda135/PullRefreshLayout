@@ -1,6 +1,7 @@
 package fanjh.mine.pullrefreshlayout.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -106,6 +107,7 @@ public class RecycleViewDemoActivity extends Activity {
             @Override
             public void onLoadMoreComplete() {
                 Toast.makeText(mContext,"亲，加载完成了哦~",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(RecycleViewDemoActivity.this,ListViewDemoActivity.class));
             }
 
             @Override

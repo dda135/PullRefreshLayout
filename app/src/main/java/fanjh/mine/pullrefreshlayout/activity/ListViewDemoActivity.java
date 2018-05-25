@@ -1,6 +1,7 @@
 package fanjh.mine.pullrefreshlayout.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -69,6 +70,7 @@ public class ListViewDemoActivity extends Activity {
             @Override
             public void onRefreshComplete() {
                 Toast.makeText(mContext,"亲，刷新已完成~",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ListViewDemoActivity.this,ContentFixedActivity.class));
             }
 
             @Override

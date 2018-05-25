@@ -164,6 +164,13 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         checkHeaderAndFooterAndAddListener();
     }
 
+    @Override
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        if(mOption.isCanDisallowInterceptorTouchEvent()) {
+            super.requestDisallowInterceptTouchEvent(disallowIntercept);
+        }
+    }
+
     /**
      * 检查头部和底部是否为监听，是的话添加到监听回调列表中
      */
@@ -202,13 +209,6 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         super.onSizeChanged(w, h, oldw, oldh);
         if(null != mOnSizeChangedCallback){
             mOnSizeChangedCallback.onSizeChanged(oldh,h);
-        }
-    }
-
-    @Override
-    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-        if(mOption.isCanDisallowInterceptorTouchEvent()) {
-            super.requestDisallowInterceptTouchEvent(disallowIntercept);
         }
     }
 
@@ -716,6 +716,14 @@ public class PullLayout extends ViewGroup implements NestedScrollingParent,Neste
         mScroller.mSmoothScrollTime = ScrollerWorker.AUTO_REFRESH_SMOOTH_TIME;
         startLoading();
         mScroller.mSmoothScrollTime = ScrollerWorker.DEFAULT_SMOOTH_TIME;
+    }
+
+    public boolean isRefreshing() {
+        return isRefreshing;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
     }
 
     @Override
