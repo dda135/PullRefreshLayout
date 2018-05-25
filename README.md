@@ -16,9 +16,6 @@
 
 usage  
 ------- 
-```
-compile 'com.github.fanjinhao:pull-refresh-layout:1.0.0'
-```
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
